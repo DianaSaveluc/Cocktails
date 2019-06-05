@@ -1,46 +1,35 @@
-
-import React, { Component, Fragment } from 'react';
+import React, {useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 
 const cocktailDetailsUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
-class CocktailDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cocktailDetails: [],
-            id: props.match.params.cocktailId
-        };
-        this.goBack = this.goBack.bind(this);
-    }
 
-    componentDidMount() {
-        axios.get(cocktailDetailsUrl + this.state.id)
-            .then(res => {
-                const details = res.data;
-                this.setState({ cocktailDetails: details });
-            })
-    }
+const CocktailDetails = (props) => {
+    const [cocktailDetails, setCocktailDetails] = useState([]);
+    const id = props.match.params.cocktailId;
 
-    goBack() {
-        this.props.history.goBack();
-    }
+    useEffect(() => {
+        axios({
+            url: cocktailDetailsUrl + id,
+            method: 'get'
+          }).then(res => setCocktailDetails(res.data));
+     },[setCocktailDetails]);
 
-    render() {
-        console.log(this.state.cocktailDetails);
-        return (<Fragment>
-            {(this.state.cocktailDetails !== null && this.state.cocktailDetails.drinks != null && this.state.cocktailDetails.drinks[0] != null) &&
+     const goBack=()=>{
+        props.history.goBack();
+     }
+
+    return (<Fragment>
+            {(cocktailDetails !== null && cocktailDetails.drinks != null && cocktailDetails.drinks[0] != null) &&
                 <Fragment>
                     <figure>
-                        <figcaption> Title : {this.state.cocktailDetails.drinks[0].strDrink} </figcaption>
-                        <img src={this.state.cocktailDetails.drinks[0].strDrinkThumb} alt={this.state.cocktailDetails.drinks[0].strDrink} />
+                        <figcaption> Title : {cocktailDetails.drinks[0].strDrink} </figcaption>
+                        <img src={cocktailDetails.drinks[0].strDrinkThumb} alt={cocktailDetails.drinks[0].strDrink} />
                     </figure>
-                    <p>{this.state.cocktailDetails.drinks[0].strInstructions} </p>
+                    <p>{cocktailDetails.drinks[0].strInstructions} </p>
                 </Fragment>
             }
-            <button class="button" onClick={this.goBack} type="button">Back</button>
-        </Fragment>
-        )
-    }
+            <button className="button" onClick={goBack} type="button">Back</button>
+        </Fragment>)
 }
 
 export default CocktailDetails;

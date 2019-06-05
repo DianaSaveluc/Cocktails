@@ -27,7 +27,7 @@ class AddCocktail extends Component {
 
     handleSubmit(event) {
         const element = (
-            <div class="flex-outer">
+            <div className="flex-outer">
                 <li>
                     <label>Cocktail name</label>
                     <label>{this.state.name}</label>
@@ -59,7 +59,7 @@ class AddCocktail extends Component {
         return (
             <Fragment>
                 <form onSubmit={this.handleSubmit}>
-                    <ul class="flex-outer">
+                    <ul className="flex-outer">
                         <li>
                             <label>Cocktail name</label>
                             <input
@@ -111,4 +111,5 @@ class AddCocktail extends Component {
 
     }
 }
+
 export default AddCocktail;
